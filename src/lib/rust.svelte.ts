@@ -10,7 +10,10 @@ export const preventDefault = <T extends Event>(
 }
 
 export class GlobalState {
-    private _state = $state({ isRecording: false })
+    private _state = $state({
+        isRecording: false,
+        error: null as string | null,
+    })
 
     set isRecording(value: boolean) {
         this._state.isRecording = value
@@ -20,9 +23,22 @@ export class GlobalState {
         return this._state.isRecording
     }
 
+    get error() {
+        return this._state.error
+    }
+
     async toggleRecord() {
-        this.isRecording = await invoke('record', {
-            isRecording: this.isRecording,
-        })
+        try {
+            this.isRecording = await invoke('record', {
+                isRecording: this.isRecording,
+            })
+            this._state.error = null
+        } catch (err) {
+            this._state.error = err.message
+        }
+    }
+
+    async checkStatus() {
+        this.isRecording = await invoke('get_recording_status')
     }
 }

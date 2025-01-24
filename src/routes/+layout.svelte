@@ -1,6 +1,6 @@
 <script lang="ts">
     import '../app.css'
-    import { Toaster } from 'svelte-sonner'
+    import { Toaster } from '$lib/components/ui/sonner'
     import { Button } from '$lib/components/ui/button'
 
     import { goto } from '$app/navigation'
