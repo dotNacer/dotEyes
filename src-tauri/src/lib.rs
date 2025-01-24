@@ -5,7 +5,7 @@ use commands::*;
 pub fn run() {
     tauri::Builder::default()
         // .plugin(tauri_plugin_shell::init()) // uncomment to use shell
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![greet, record])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

@@ -21,3 +21,7 @@ tauri = { version = "2", features = [] }
 # tauri-plugin-shell = "2" # uncomment to use shell
 serde_json = "1"
 serde = { version = "1", features = ["derive"] }
+
+# Imports des librairies pour le recording
+ffmpeg-next = "6.1.0"  # Bindings Rust pour FFmpeg
+x11-dl = "2.21.0"      # Bindings dynamiques pour X11/Xlib

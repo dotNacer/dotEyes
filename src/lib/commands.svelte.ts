@@ -1,7 +1,7 @@
 import { invoke } from '@tauri-apps/api/core'
 
 export const preventDefault = <T extends Event>(
-    fn: (e: T) => void,
+    fn: (e: T) => void
 ): ((e: T) => void) => {
     return (e: T) => {
         e.preventDefault()
