@@ -41,18 +41,27 @@ impl ScreenRecorder {
         let timestamp = Local::now().format("%Y%m%d_%H%M%S");
         let output_file = self.output_path.join(format!("screen_recording_{}.mp4", timestamp));
         
-        // Utilisation de wf-recorder pour Wayland
-        let _status = Command::new("wf-recorder")
-            .arg("--file")
-            .arg(&output_file)
-            .arg("--codec")
-            .arg("h264")
-            .arg("--pixel-format")
-            .arg("yuv420p")  // Format compatible avec la plupart des lecteurs
+        // Utiliser ffmpeg pour X11
+        let _status = Command::new("ffmpeg")
+            .arg("-f")
+            .arg("x11grab")  // Capture X11
+            .arg("-framerate")
+            .arg("30")       // 30 FPS
+            .arg("-i")
+            .arg(":0.0")     // Display X11
+            .arg("-c:v")
+            .arg("libx264")  // Codec vidéo
+            .arg("-preset")
+            .arg("ultrafast")
+            .arg("-qp")
+            .arg("0")        // Qualité maximale
+            .arg("-pix_fmt")
+            .arg("yuv420p")  // Format compatible
+            .arg(output_file)
             .spawn()
             .map_err(|e| {
                 if e.kind() == std::io::ErrorKind::NotFound {
-                    "wf-recorder n'est pas installé. Veuillez l'installer avec : sudo apt install wf-recorder".to_string()
+                    "ffmpeg n'est pas installé. Veuillez l'installer avec : sudo apt install ffmpeg".to_string()
                 } else {
                     format!("Erreur lors du démarrage de l'enregistrement: {}", e)
                 }
@@ -67,9 +76,10 @@ impl ScreenRecorder {
             return Err("Not recording".to_string());
         }
 
-        // Arrêter wf-recorder
+        // Arrêter ffmpeg
         let _status = Command::new("pkill")
-            .arg("wf-recorder")
+            .arg("-f")
+            .arg("ffmpeg")
             .status()
             .map_err(|e| format!("Erreur lors de l'arrêt de l'enregistrement: {}", e))?;
 
