@@ -41,14 +41,16 @@ impl ScreenRecorder {
         let timestamp = Local::now().format("%Y%m%d_%H%M%S");
         let output_file = self.output_path.join(format!("screen_recording_{}.mp4", timestamp));
         
-        // Utilisation de wf-recorder pour Wayland
+        // Configuration améliorée de wf-recorder
         let _status = Command::new("wf-recorder")
             .arg("--file")
             .arg(&output_file)
             .arg("--codec")
-            .arg("h264")
+            .arg("libx264")  // Utilisation explicite de libx264
             .arg("--pixel-format")
-            .arg("yuv420p")  // Format compatible avec la plupart des lecteurs
+            .arg("yuv420p")
+            .arg("--encoder-params")
+            .arg("preset=veryfast:tune=zerolatency")  // Paramètres d'encodage optimisés
             .spawn()
             .map_err(|e| {
                 if e.kind() == std::io::ErrorKind::NotFound {
