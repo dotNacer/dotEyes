@@ -21,3 +21,10 @@ tauri = { version = "2", features = [] }
 # tauri-plugin-shell = "2" # uncomment to use shell
 serde_json = "1"
 serde = { version = "1", features = ["derive"] }
+once_cell = "1.19.0"  # Ajoutez cette ligne avec les autres dépendances
+
+# Imports des librairies pour le recording
+ffmpeg-next = "6.1.0"  # Bindings Rust pour FFmpeg
+x11-dl = "2.21.0"      # Bindings dynamiques pour X11/Xlib
+dirs = "5.0"           # Pour obtenir le chemin du dossier home
+chrono = "0.4"        # Pour générer les timestamps
